@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Me</title>
+  <style>
+    :root {
+      --primary: #2d1e6b;
+      --secondary: #6c47ff;
+      --accent: #a259ff;
+      --bg: #f8f9fa;
+      --text: #22223b;
+      --white: #fff;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .contact-card {
+      background: var(--white);
+      border-radius: 1.2rem;
+      box-shadow: 0 2px 16px rgba(44,33,100,0.08);
+      padding: 2.5rem 2rem 2rem 2rem;
+      margin: 2rem auto;
+      max-width: 400px;
+      width: 100%;
+    }
+    .contact-card h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: var(--primary);
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .contact-card input,
+    .contact-card textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border: 1px solid #ccc;
+      border-radius: 0.7rem;
+      font-size: 1rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: border 0.2s;
+    }
+    .contact-card input:focus,
+    .contact-card textarea:focus {
+      border: 1.5px solid var(--accent);
+      outline: none;
+    }
+    .cta-btn {
+      background: var(--accent);
+      color: var(--white);
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(162,89,255,0.12);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 1.2rem;
+      width: 100%;
+    }
+    .cta-btn:hover {
+      background: var(--secondary);
+      transform: translateY(-2px) scale(1.04);
+    }
+  </style>
+</head>
+<body>
+  <div class="contact-card">
+    <h2>Contact Me</h2>
+    <form action="https://formsubmit.co/hashimtabassumeducation@gmail.com" method="POST">
+      <input type="hidden" name="_next" value="/contact">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="text" name="from_name" placeholder="Your Name" required>
+      <input type="email" name="from_email" placeholder="Your Email" required>
+      <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
+      <button type="submit" class="cta-btn">Send Message</button>
+    </form>
+  </div>
+</body>
+</html> 

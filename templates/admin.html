@@ -1,0 +1,213 @@
+<!-- templates/admin.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        :root {
+            --primary: #2d1e6b;
+            --secondary: #6c47ff;
+            --accent: #a259ff;
+            --bg: #f8f9fa;
+            --text: #22223b;
+            --white: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', 'Inter', Arial, sans-serif;
+            background: linear-gradient(120deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 2px 8px rgba(44,33,100,0.06);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .navbar-brand {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-decoration: none;
+        }
+        .navbar-nav {
+            display: flex;
+            gap: 1.2rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-item.active .nav-link {
+            color: var(--accent);
+        }
+        .container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 1rem;
+        }
+        .jumbotron {
+            background: var(--white);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(44,33,100,0.08);
+            padding: 2.5rem 2rem 2rem 2rem;
+            margin-bottom: 2rem;
+        }
+        .jumbotron h1 {
+            color: var(--primary);
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+        .jumbotron p {
+            color: var(--text);
+            font-size: 1.1rem;
+        }
+        .card {
+            background: var(--white);
+            border-radius: 1.2rem;
+            box-shadow: 0 2px 16px rgba(44,33,100,0.08);
+            margin-bottom: 2rem;
+        }
+        .card-header {
+            padding: 1.2rem 2rem 1rem 2rem;
+            border-bottom: 1px solid #eee;
+        }
+        .card-header h3 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .card-body {
+            padding: 2rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 0.9rem 1rem;
+            text-align: left;
+        }
+        th {
+            background: var(--bg);
+            color: var(--primary);
+            font-weight: 700;
+            border-bottom: 2px solid #eee;
+        }
+        tr {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        tr:last-child {
+            border-bottom: none;
+        }
+        td {
+            color: var(--text);
+        }
+        img {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border: 2px solid #dee2e6;
+        }
+        .alert {
+            margin-bottom: 1rem;
+            padding: 0.7rem 1rem;
+            border-radius: 0.7rem;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .alert-danger { background: #ffeaea; color: #d90429; }
+        .alert-success { background: #eaffea; color: #1b8a3a; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a class="navbar-brand" href="{{ url_for('root') }}">DomAi</a>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('dashboard') }}">Home</a>
+            </li>
+            {% if session.get('is_admin') %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Admin Panel</a>
+            </li>
+            {% endif %}
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div class="jumbotron" style="display: flex; align-items: center; gap: 2rem;">
+            <img src="{{ url_for('static', filename='img/admin.jpg') }}" alt="Admin Profile" style="border-radius: 50%; width: 80px; height: 80px; object-fit: cover; border: 3px solid var(--accent);">
+            <div>
+                <h1>Welcome, Administrator!</h1>
+                <p>This is the admin control panel. You can manage users and view system activity here.</p>
+            </div>
+        </div>
+        <!-- Flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="card">
+            <div class="card-header">
+                <h3>User Management</h3>
+            </div>
+            <div class="card-body">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Profile Image</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user['id'] }}</td>
+                            <td>{{ user['name'] }}</td>
+                            <td>{{ user['email'] }}</td>
+                            <td>
+                                {% if user['profile_image'] and user['profile_image'] != 'default_profile.png' %}
+                                    <img src="{{ url_for('uploaded_file', filename=user.profile_image) }}" alt="Profile">
+                                {% else %}
+                                    <small>No image</small>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" style="text-align:center;">No registered users found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>````````````````````````````````````````
+        </div>
+    </div>
+</body>
+</html>
